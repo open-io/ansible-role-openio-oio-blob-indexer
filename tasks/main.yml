@@ -36,7 +36,6 @@
     - "/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"
     - "{{ openio_blob_indexer_sysconfig_dir }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"
     - "{{ openio_blob_indexer_volume }}"
-    - "/var/log/oio/sds/{{ openio_blob_indexer_namespace }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"
 
 - name: Ensure directories exists
   file:
@@ -48,6 +47,16 @@
     recurse: true
   with_items: "{{ _dir.results }}"
   when: not item.stat.exists
+  tags: install
+
+- name: Ensure log directory
+  file:
+    path: "/var/log/oio/sds/{{ openio_blob_indexer_namespace }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"
+    state: directory
+    owner: "{{ syslog_user }}"
+    group: openio
+    mode: 0750
+    recurse: true
   tags: install
 
 - name: Generate configuration files

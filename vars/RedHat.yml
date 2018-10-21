@@ -3,4 +3,5 @@
 ---
 blob_indexer_packages:
   - openio-sds-server
+syslog_user: openio
 ...
