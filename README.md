@@ -1,7 +1,7 @@
 [![Build Status](https://travis-ci.org/open-io/ansible-role-openio-oio-blob-indexer.svg?branch=master)](https://travis-ci.org/open-io/ansible-role-openio-oio-blob-indexer)
 # Ansible role `blob_indexer`
 
-An Ansible role for OpenIO oio-blolb-indexer. Specifically, the responsibilities of this role are to:
+An Ansible role for OpenIO oio-blob-indexer. Specifically, the responsibilities of this role are to:
 
 - Install and configure
 
@@ -14,16 +14,15 @@ An Ansible role for OpenIO oio-blolb-indexer. Specifically, the responsibilities
 
 | Variable   | Default | Comments (type)  |
 | :---       | :---    | :---             |
-| `openio_blob_indexer_chunks_per_second` | `2` | ... |
-| `openio_blob_indexer_gridinit_dir` | `"/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"` | ... |
-| `openio_blob_indexer_gridinit_file_prefix` | `""` | ... |
+| `openio_blob_indexer_chunks_per_second` | `2` | Max chunks per second |
+| `openio_blob_indexer_gridinit_dir` | `"/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"` | Path to copy the gridinit conf |
+| `openio_blob_indexer_gridinit_file_prefix` | `""` | Maybe set it to {{ openio_ecd_namespace }}- for old gridinit's style |
 | `openio_blob_indexer_interval` | `300` | ... |
-| `openio_blob_indexer_location` | `"{{ ansible_hostname }}.{{ openio_blob_indexer_serviceid }}"` | ... |
-| `openio_blob_indexer_namespace` | `"OPENIO"` | ... |
-| `openio_blob_indexer_provision_only` | `false` | ... |
+| `openio_blob_indexer_namespace` | `"OPENIO"` | Namespace |
+| `openio_blob_indexer_provision_only` | `false` | Provision only without restarting services |
 | `openio_blob_indexer_report_interval` | `5` | ... |
-| `openio_blob_indexer_serviceid` | `"0"` | ... |
-| `openio_blob_indexer_volume` | `"/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"` | ... |
+| `openio_blob_indexer_serviceid` | `"0"` | ID in gridinit |
+| `openio_blob_indexer_volume` | `"/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"` | Volume to index |
 ## Dependencies
 
 No dependencies.
