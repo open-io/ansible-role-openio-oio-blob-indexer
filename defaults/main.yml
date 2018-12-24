@@ -9,11 +9,7 @@ openio_blob_indexer_gridinit_file_prefix: ""
 openio_blob_indexer_report_interval: 5
 openio_blob_indexer_chunks_per_second: 2
 openio_blob_indexer_interval: 300
-#openio_blob_indexer_bind_interface: "{{ ansible_default_ipv4.alias }}"
-#openio_blob_indexer_bind_address:
-#  "{{ hostvars[inventory_hostname]['ansible_' + openio_blob_indexer_bind_interface]['ipv4']['address'] }}"
 
-openio_blob_indexer_volume: "/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"
+openio_blob_indexer_volume: "/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/{{ openio_blob_indexer_servicename }}"
 openio_blob_indexer_provision_only: false
-openio_blob_indexer_location: "{{ ansible_hostname }}.{{ openio_blob_indexer_serviceid }}"
 ...
