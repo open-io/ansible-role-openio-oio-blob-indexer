@@ -15,6 +15,9 @@ An Ansible role for OpenIO oio-blob-indexer. Specifically, the responsibilities 
 | Variable   | Default | Comments (type)  |
 | :---       | :---    | :---             |
 | `openio_blob_indexer_chunks_per_second` | `2` | Max chunks per second |
+| `openio_blob_indexer_convert_chunks` | `true` | Convert old xattr to new xattr |
+| `openio_blob_indexer_convert_chunks_no_backup` | `true` | Don't save old xattr to a file |
+| `openio_blob_indexer_convert_chunks_volume` | `{{ openio_blob_indexer_volume }}` | Directory where save difference between xattr |
 | `openio_blob_indexer_gridinit_dir` | `"/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"` | Path to copy the gridinit conf |
 | `openio_blob_indexer_gridinit_file_prefix` | `""` | Maybe set it to {{ openio_ecd_namespace }}- for old gridinit's style |
 | `openio_blob_indexer_interval` | `300` | Secondes between 2 passes |
@@ -23,6 +26,7 @@ An Ansible role for OpenIO oio-blob-indexer. Specifically, the responsibilities 
 | `openio_blob_indexer_report_interval` | `5` | Secondes to display progression |
 | `openio_blob_indexer_serviceid` | `"0"` | ID in gridinit |
 | `openio_blob_indexer_volume` | `"/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"` | Volume to index |
+
 
 ## Dependencies
 

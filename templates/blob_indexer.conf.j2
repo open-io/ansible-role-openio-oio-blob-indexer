@@ -10,3 +10,8 @@ log_level = info
 log_facility = LOG_LOCAL0
 log_address = /dev/log
 syslog_prefix = OIO,{{ openio_blob_indexer_namespace }},oio-blob-indexer,{{ openio_blob_indexer_serviceid }}
+
+# oio-blob-converter configuration
+convert_chunks = {{ openio_blob_indexer_convert_chunks }}
+no_backup = {{ openio_blob_indexer_convert_chunks_no_backup }}
+backup_dir = {{ openio_blob_indexer_convert_chunks_volume }}
