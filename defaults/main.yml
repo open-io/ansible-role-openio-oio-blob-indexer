@@ -1,7 +1,7 @@
 # roles/blob_indexer/defaults/main.yml
 ---
-openio_blob_indexer_namespace: "OPENIO"
-openio_blob_indexer_serviceid: "0"
+openio_blob_indexer_namespace: "{{ namespace | default('OPENIO') }}"
+openio_blob_indexer_serviceid: "{{ 0 + openio_legacy_serviceid | d(0) | int }}"
 
 openio_blob_indexer_gridinit_dir: "/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"
 openio_blob_indexer_gridinit_file_prefix: ""
