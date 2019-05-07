@@ -46,12 +46,25 @@
         {{ openio_blob_indexer_servicename }}.conf"
   register: _blob_indexer_conf
 
-- name: restart blob_indexer
+- name: "restart blob_indexer to apply the new configuration"
   shell: |
     gridinit_cmd reload
     gridinit_cmd restart  {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+  register: _restart_blob_indexer
   when:
-    - _blob_indexer_conf.changed
+    - _blob_indexer_conf is changed
     - not openio_blob_indexer_provision_only
   tags: configure
+
+- block:
+    - name: "Ensure blob_indexer is started"
+      command: gridinit_cmd start {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+      register: _start_blob_indexer
+      changed_when: '"Success" in _start_blob_indexer.stdout'
+      when:
+        - not openio_blob_indexer_provision_only
+        - _restart_blob_indexer is skipped
+      tags: configure
+  when: openio_bootstrap | d(false)
+
 ...
