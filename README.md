@@ -20,6 +20,7 @@ An Ansible role for OpenIO oio-blob-indexer. Specifically, the responsibilities 
 | `openio_blob_indexer_interval` | `300` | Secondes between 2 passes |
 | `openio_blob_indexer_namespace` | `"OPENIO"` | Namespace |
 | `openio_blob_indexer_provision_only` | `false` | Provision only without restarting services |
+| `openio_blob_indexer_package_upgrade` | `false` | Set the packages to the latest version (to be set in extra_vars) |
 | `openio_blob_indexer_report_interval` | `5` | Secondes to display progression |
 | `openio_blob_indexer_serviceid` | `"0"` | ID in gridinit |
 | `openio_blob_indexer_volume` | `"/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/oio-blob-indexer-{{ openio_blob_indexer_serviceid }}"` | Volume to index |
