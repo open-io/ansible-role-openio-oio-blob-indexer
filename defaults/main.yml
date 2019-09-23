@@ -12,4 +12,5 @@ openio_blob_indexer_interval: 300
 
 openio_blob_indexer_volume: "/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/{{ openio_blob_indexer_servicename }}"
 openio_blob_indexer_provision_only: false
+openio_blob_indexer_package_upgrade: "{{ openio_package_upgrade | d(false) }}"
 ...
