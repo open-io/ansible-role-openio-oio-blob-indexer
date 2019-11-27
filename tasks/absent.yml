@@ -1,0 +1,33 @@
+# roles/blob_indexer/tasks/absent.yml
+---
+- name: absent - Reset defaults
+  set_fact:
+    openio_blob_indexer_servicename: "{{ bi.ansible_facts._blob_indexer.name }}"
+    openio_blob_indexer_serviceid: "{{ bi.ansible_facts._blob_indexer.id }}"
+    openio_blob_indexer_volume: "{{ bi.ansible_facts._blob_indexer.volume }}"
+
+
+- name: absent - Remove configuration files
+  file:
+    dest: "{{ item.dest }}"
+    state: absent
+  with_items:
+    - dest: "{{ openio_blob_indexer_sysconfig_dir }}/\
+        {{ openio_blob_indexer_servicename }}/{{ openio_blob_indexer_servicename }}-httpd.conf"
+    - dest: "{{ openio_blob_indexer_gridinit_dir }}/{{ openio_blob_indexer_gridinit_file_prefix }}\
+        {{ openio_blob_indexer_servicename }}.conf"
+    - dest: "{{ openio_blob_indexer_sysconfig_dir }}/watch/{{ openio_blob_indexer_servicename }}.yml"
+  register: _blob_indexer_conf
+
+- block:
+    - name: absent - stop blob_indexer to apply the new configuration
+      shell: gridinit_cmd stop  {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+
+    - name: absent - Set properties
+      set_fact:
+        need_reload: true
+  when:
+    - _blob_indexer_conf is changed
+    - not openio_blob_indexer_provision_only
+
+...

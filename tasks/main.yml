@@ -16,58 +16,60 @@
     - "{{ ansible_os_family }}.yml"
   tags: install
 
-- name: Ensure directories exists
-  file:
-    path: "{{ item.path }}"
-    state: directory
-    owner: "{{ item.owner | default('openio') }}"
-    group: "{{ item.group | default('openio') }}"
-    mode: "{{ item.mode | default(0755) }}"
-  with_items:
-    - path: "/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"
-    - path: "{{ openio_blob_indexer_sysconfig_dir }}/{{ openio_blob_indexer_servicename }}"
-    - path: "{{ openio_blob_indexer_volume }}"
-    - path: "/var/log/oio/sds/{{ openio_blob_indexer_namespace }}/{{ openio_blob_indexer_servicename }}"
-      owner: "{{ syslog_user }}"
-      mode: "0750"
-  tags: configure
+- name: Set properties
+  set_fact:
+    _blob_indexer:
+      volume: "{{ item.1.volume }}"  # mandatory
+      name: "{{ openio_blob_indexer_type }}-{{ item.1.id | default(item.0) }}"  # calculated
+      id: "{{ item.1.id | default(item.0) }}"  # mandatory
+      state: "{{ item.1.state | d('present') }}"
+  with_indexed_items: "{{ openio_blob_indexer_instances }}"
+  register: _blob_indexer_properties
 
-- name: Generate configuration files
-  template:
-    src: "{{ item.src }}"
-    dest: "{{ item.dest }}"
+- name: Ensure namespace directories exist
+  file:
+    path: "{{ item }}"
+    state: directory
     owner: openio
     group: openio
-    mode: 0644
+    mode: "0755"
   with_items:
-    - src: "blob_indexer.conf.j2"
-      dest: "{{ openio_blob_indexer_sysconfig_dir }}/\
-        {{ openio_blob_indexer_servicename }}/{{ openio_blob_indexer_servicename }}.conf"
-    - src: "gridinit_blob_indexer.conf.j2"
-      dest: "{{ openio_blob_indexer_gridinit_dir }}/{{ openio_blob_indexer_gridinit_file_prefix }}\
-        {{ openio_blob_indexer_servicename }}.conf"
-  register: _blob_indexer_conf
+    - "/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"
   tags: configure
 
-- name: "restart blob_indexer to apply the new configuration"
-  shell: |
-    gridinit_cmd reload
-    gridinit_cmd restart  {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
-  register: _restart_blob_indexer
+- name: "Include tasks for blob_indexer state"
+  include_tasks: "{{ bi.ansible_facts._blob_indexer.state }}.yml"
+  tags: configure
+  with_items: "{{ _blob_indexer_properties.results }}"
+  loop_control:
+    loop_var: bi
+
+- name: "Reload gridinit to apply the new configuration"
+  shell: gridinit_cmd reload
   when:
+    - not openio_blob_indexer_provision_only
+    - need_reload | default(false)
+
+- name: "restart blob_indexer to apply the new configuration"
+  shell: gridinit_cmd restart  {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+  with_items: "{{ _blob_indexer_properties.results }}"
+  when:
+    - item.ansible_facts._blob_indexer.state == "present"
     - _blob_indexer_conf is changed
     - not openio_blob_indexer_provision_only
-  tags: configure
 
 - block:
     - name: "Ensure blob_indexer is started"
-      command: gridinit_cmd start {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+      command: gridinit_cmd start {{ openio_blob_indexer_namespace }}-{{ item.ansible_facts._blob_indexer.name }}
       register: _start_blob_indexer
       changed_when: '"Success" in _start_blob_indexer.stdout'
-      when:
-        - not openio_blob_indexer_provision_only
-        - _restart_blob_indexer is skipped
-      tags: configure
-  when: openio_bootstrap | d(false)
+      when: item.ansible_facts._blob_indexer.state == "present"
+      with_items: "{{ _blob_indexer_properties.results }}"
 
+    # TODO: add check
+
+  tags: configure
+  when:
+    - not openio_blob_indexer_provision_only
+    - openio_bootstrap | d(false)
 ...
