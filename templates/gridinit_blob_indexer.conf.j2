@@ -1,7 +1,7 @@
 # {{ ansible_managed }}
 [Service.{{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}]
 command=/usr/bin/oio-blob-indexer /etc/oio/sds/{{ openio_blob_indexer_namespace }}/{{ openio_blob_indexer_servicename }}/{{ openio_blob_indexer_servicename }}.conf
-enabled=true
+enabled={{ 'false' if openio_blob_indexer_state == 'offline' else 'true' }}
 start_at_boot=true
 on_die=respawn
 group={{ openio_blob_indexer_namespace }},oio-blob-indexer,{{ openio_blob_indexer_serviceid }}
