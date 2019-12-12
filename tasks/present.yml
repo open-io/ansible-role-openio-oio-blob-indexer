@@ -7,6 +7,9 @@
     openio_blob_indexer_serviceid: "{{ bi.ansible_facts._blob_indexer.id }}"
     openio_blob_indexer_volume: "{{ bi.ansible_facts._blob_indexer.volume }}"
     openio_blob_indexer_state: "{{ bi.ansible_facts._blob_indexer.state }}"
+  tags:
+    - install
+    - configure
 
 - name: present - Ensure directories exists
   file:
@@ -21,6 +24,7 @@
     - path: "/var/log/oio/sds/{{ openio_blob_indexer_namespace }}/{{ openio_blob_indexer_servicename }}"
       owner: "{{ syslog_user }}"
       mode: "0750"
+  tags: install
 
 - name: present - Generate configuration files
   template:
@@ -37,6 +41,7 @@
       dest: "{{ openio_blob_indexer_gridinit_dir }}/{{ openio_blob_indexer_gridinit_file_prefix }}\
         {{ openio_blob_indexer_servicename }}.conf"
   register: _blob_indexer_conf
+  tags: configure
 
 - block:
     - name: present - Set properties
@@ -45,4 +50,5 @@
   when:
     - _blob_indexer_conf is changed
     - not openio_blob_indexer_provision_only
+  tags: configure
 ...

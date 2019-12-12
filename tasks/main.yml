@@ -25,6 +25,9 @@
       state: "{{ item.1.state | d('present') }}"
   with_indexed_items: "{{ openio_blob_indexer_instances }}"
   register: _blob_indexer_properties
+  tags:
+    - install
+    - configure
 
 - name: Ensure namespace directories exist
   file:
@@ -39,19 +42,23 @@
 
 - name: "Include tasks for blob_indexer state"
   include_tasks: "{{ bi.ansible_facts._blob_indexer.state }}.yml"
-  tags: configure
+  tags:
+    - install
+    - configure
   with_items: "{{ _blob_indexer_properties.results }}"
   loop_control:
     loop_var: bi
 
 - name: "Reload gridinit to apply the new configuration"
   shell: gridinit_cmd reload
+  tags: configure
   when:
     - not openio_blob_indexer_provision_only
     - need_reload | default(false)
 
 - name: "restart blob_indexer to apply the new configuration"
   shell: gridinit_cmd restart  {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+  tags: configure
   with_items: "{{ _blob_indexer_properties.results }}"
   when:
     - item.ansible_facts._blob_indexer.state == "present"
