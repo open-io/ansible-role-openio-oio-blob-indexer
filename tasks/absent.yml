@@ -5,7 +5,9 @@
     openio_blob_indexer_servicename: "{{ bi.ansible_facts._blob_indexer.name }}"
     openio_blob_indexer_serviceid: "{{ bi.ansible_facts._blob_indexer.id }}"
     openio_blob_indexer_volume: "{{ bi.ansible_facts._blob_indexer.volume }}"
-
+  tags:
+    - install
+    - configure
 
 - name: absent - Remove configuration files
   file:
@@ -18,6 +20,7 @@
         {{ openio_blob_indexer_servicename }}.conf"
     - dest: "{{ openio_blob_indexer_sysconfig_dir }}/watch/{{ openio_blob_indexer_servicename }}.yml"
   register: _blob_indexer_conf
+  tags: configure
 
 - block:
     - name: absent - stop blob_indexer to apply the new configuration
@@ -29,5 +32,5 @@
   when:
     - _blob_indexer_conf is changed
     - not openio_blob_indexer_provision_only
-
+  tags: configure
 ...
