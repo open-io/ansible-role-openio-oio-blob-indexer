@@ -57,7 +57,7 @@
     - need_reload | default(false)
 
 - name: "restart blob_indexer to apply the new configuration"
-  shell: gridinit_cmd restart  {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+  command: "gridinit_cmd restart  {{ openio_blob_indexer_namespace }}-{{ item.ansible_facts._blob_indexer.name }}"
   tags: configure
   with_items: "{{ _blob_indexer_properties.results }}"
   when:
@@ -67,7 +67,7 @@
 
 - block:
     - name: "Ensure blob_indexer is started"
-      command: gridinit_cmd start {{ openio_blob_indexer_namespace }}-{{ item.ansible_facts._blob_indexer.name }}
+      command: "gridinit_cmd start {{ openio_blob_indexer_namespace }}-{{ item.ansible_facts._blob_indexer.name }}"
       register: _start_blob_indexer
       changed_when: '"Success" in _start_blob_indexer.stdout'
       when: item.ansible_facts._blob_indexer.state == "present"

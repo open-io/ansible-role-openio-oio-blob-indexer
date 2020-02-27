@@ -2,10 +2,10 @@
 ---
 - name: offline - Reset defaults
   set_fact:
-    openio_blob_indexer_servicename: "{{ bi.ansible_facts._blob_indexer.name }}"
-    openio_blob_indexer_serviceid: "{{ bi.ansible_facts._blob_indexer.id }}"
-    openio_blob_indexer_volume: "{{ bi.ansible_facts._blob_indexer.volume }}"
-    openio_blob_indexer_state: "{{ bi.ansible_facts._blob_indexer.state }}"
+    _openio_blob_indexer_servicename: "{{ bi.ansible_facts._blob_indexer.name }}"
+    _openio_blob_indexer_serviceid: "{{ bi.ansible_facts._blob_indexer.id }}"
+    _openio_blob_indexer_volume: "{{ bi.ansible_facts._blob_indexer.volume }}"
+    _openio_blob_indexer_state: "{{ bi.ansible_facts._blob_indexer.state }}"
   tags:
     - install
     - configure
@@ -20,13 +20,13 @@
   with_items:
     - src: "gridinit_blob_indexer.conf.j2"
       dest: "{{ openio_blob_indexer_gridinit_dir }}/{{ openio_blob_indexer_gridinit_file_prefix }}\
-        {{ openio_blob_indexer_servicename }}.conf"
+        {{ _openio_blob_indexer_servicename }}.conf"
   register: _blob_indexer_conf
   tags: configure
 
 - block:
     - name: offline - stop blob_indexer to apply the new configuration
-      shell: gridinit_cmd stop  {{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}
+      shell: gridinit_cmd stop  {{ openio_blob_indexer_namespace }}-{{ _openio_blob_indexer_servicename }}
 
     - name: offline - Set properties
       set_fact:

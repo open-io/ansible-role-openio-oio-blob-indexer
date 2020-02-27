@@ -1,10 +1,10 @@
 # {{ ansible_managed }}
-[Service.{{ openio_blob_indexer_namespace }}-{{ openio_blob_indexer_servicename }}]
-command=/usr/bin/oio-blob-indexer {{ openio_blob_indexer_sysconfig_dir }}/{{ openio_blob_indexer_servicename }}/{{ openio_blob_indexer_servicename }}.conf
-enabled={{ 'false' if openio_blob_indexer_state == 'offline' else 'true' }}
+[Service.{{ openio_blob_indexer_namespace }}-{{ _openio_blob_indexer_servicename }}]
+command=/usr/bin/oio-blob-indexer {{ openio_blob_indexer_sysconfig_dir }}/{{ _openio_blob_indexer_servicename }}/{{ _openio_blob_indexer_servicename }}.conf
+enabled={{ 'false' if _openio_blob_indexer_state == 'offline' else 'true' }}
 start_at_boot=true
 on_die=respawn
-group={{ openio_blob_indexer_namespace }},oio-blob-indexer,{{ openio_blob_indexer_serviceid }}
+group={{ openio_blob_indexer_namespace }},oio-blob-indexer,{{ _openio_blob_indexer_serviceid }}
 uid=openio
 gid=openio
 env.PATH=/usr/local/bin:/usr/bin:/usr/local/sbin:/usr/sbin
