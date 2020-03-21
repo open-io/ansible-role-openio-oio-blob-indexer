@@ -2,15 +2,15 @@
 openio_blob_indexer_namespace: "{{ namespace | default('OPENIO') }}"
 openio_blob_indexer_serviceid: "{{ 0 + openio_legacy_serviceid | d(0) | int }}"
 
-openio_blob_indexer_gridinit_dir: "/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"
-openio_blob_indexer_gridinit_file_prefix: ""
+openio_blob_indexer_gridinit_dir: "{{ openio_gridinit_d | d('/etc/gridinit.d/') }}"
+openio_blob_indexer_gridinit_file_prefix: "{{ openio_blob_indexer_namespace }}-"
 
 openio_blob_indexer_report_interval: 5
 openio_blob_indexer_chunks_per_second: 2
 openio_blob_indexer_interval: 300
 
 openio_blob_indexer_volume: "/var/lib/oio/sds/{{ openio_blob_indexer_namespace }}/{{ openio_blob_indexer_servicename }}"
-openio_blob_indexer_provision_only: false
+openio_blob_indexer_provision_only: "{{ openio_maintenance_mode | d(false) | bool }}"
 openio_blob_indexer_package_upgrade: "{{ openio_package_upgrade | d(false) }}"
 
 openio_blob_indexer_state: present
