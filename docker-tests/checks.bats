@@ -10,11 +10,11 @@
     echo "status: "$status
     [[ "${status}" -eq "0" ]]
 
-    run bash -c "docker exec -ti ${SUT_ID} stat /etc/gridinit.d/TRAVIS/oio-blob-indexer-5.conf"
+    run bash -c "docker exec -ti ${SUT_ID} stat /etc/gridinit.d/TRAVIS-oio-blob-indexer-5.conf"
     echo "status: "$status
     [[ "${status}" -eq "0" ]]
 
-    run bash -c "docker exec -ti ${SUT_ID} stat /etc/gridinit.d/TRAVIS/oio-blob-indexer-3.conf"
+    run bash -c "docker exec -ti ${SUT_ID} stat /etc/gridinit.d/TRAVIS-oio-blob-indexer-3.conf"
     echo "status: "$status
     [[ "${status}" -eq "0" ]]
 

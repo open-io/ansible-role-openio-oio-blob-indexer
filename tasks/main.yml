@@ -29,17 +29,6 @@
     - install
     - configure
 
-- name: Ensure namespace directories exist
-  file:
-    path: "{{ item }}"
-    state: directory
-    owner: openio
-    group: openio
-    mode: "0755"
-  with_items:
-    - "/etc/gridinit.d/{{ openio_blob_indexer_namespace }}"
-  tags: configure
-
 - name: "Include tasks for blob_indexer state"
   include_tasks: "{{ bi.ansible_facts._blob_indexer.state }}.yml"
   tags:
