@@ -1,4 +1,4 @@
-[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-oio-blob-indexer.svg?branch=master)](https://travis-ci.org/open-io/ansible-role-openio-oio-blob-indexer)
+[![Build Status](https://travis-ci.org/open-io/ansible-role-openio-oio-blob-indexer.svg?branch=20.04)](https://travis-ci.org/open-io/ansible-role-openio-oio-blob-indexer)
 # Ansible role `blob_indexer`
 
 An Ansible role for OpenIO oio-blob-indexer. Specifically, the responsibilities of this role are to:
